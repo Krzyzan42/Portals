@@ -503,7 +503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: {x: 2, y: 3}
-  walkIn: 1
 --- !u!1 &3763464886504340397
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,14 +679,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkDetector: {fileID: 3763464886459427836}
+  size: {x: 2, y: 3}
+  recursionLimit: 2
+  connectedPortal: {fileID: 0}
+  surface: {fileID: 0}
   portalCamera: {fileID: 3763464885731238478}
   screen: {fileID: 3763464885099920859}
   clippingPlane: {fileID: 3763464886458055984}
   backFace: {fileID: 3763464885334568463}
-  recursionLimit: 2
-  mainCamera: {fileID: 0}
-  connectedPortal: {fileID: 0}
-  attatchedCollider: {fileID: 0}
 --- !u!1 &7868290216608715820
 GameObject:
   m_ObjectHideFlags: 0

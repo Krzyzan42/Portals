@@ -35,7 +35,7 @@ public class PortalManager : MonoBehaviour {
 
 		if(placedPortal)
 			Destroy(placedPortal.gameObject);
-		BoxSurfaceResult result = surface.GetPortalPosit(worldPos, new Vector2(2.05f, 3.05f));
+		BoxSurfaceResult result = surface.GetPortalPosit(worldPos, portalPrefab.size);
 		Quaternion rot = result.rotation;
 		Vector3 pos = result.position + rot * Vector3.forward * portalPlacementOffset;
 		if(!isEnter)
