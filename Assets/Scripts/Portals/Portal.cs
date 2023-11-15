@@ -16,8 +16,6 @@ public class Portal : MonoBehaviour
 	private MeshRenderer screen;
 	[SerializeField]
 	private Transform clippingPlane;
-	[SerializeField]
-	private MeshRenderer backFace;
 	private RenderTexture texture;
 	private Camera mainCamera;
 
@@ -52,7 +50,6 @@ public class Portal : MonoBehaviour
 			return;
 		}
 
-		connectedPortal.backFace.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		connectedPortal.screen.enabled = false;
 		screen.material.SetTexture("_MainTex", Texture2D.blackTexture);
 
@@ -86,7 +83,6 @@ public class Portal : MonoBehaviour
 			if (i == renderStart)
 				screen.material.SetTexture("_MainTex", texture);
 		}
-		connectedPortal.backFace.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		connectedPortal.screen.enabled = true;
 	}
 	
