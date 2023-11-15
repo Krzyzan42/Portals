@@ -18,10 +18,10 @@ public abstract class PortalWalker : MonoBehaviour
 		Portal enterPortal = PortalManager.instance.enterPortal;
 		Portal exitPortal = PortalManager.instance.exitPortal;
 
-		if (enterPortal.walkDetector.HasWalkedThrough(lastPos, pos)) {
+		if (enterPortal && enterPortal.walkDetector.HasWalkedThrough(lastPos, pos)) {
 			WalkedThrough(enterPortal);
 		}
-		if (exitPortal.walkDetector.HasWalkedThrough(lastPos, pos)) {
+		if (exitPortal && exitPortal.walkDetector.HasWalkedThrough(lastPos, pos)) {
 			WalkedThrough(exitPortal);
 		}
 		lastPos = transform.position;
@@ -40,26 +40,29 @@ public abstract class PortalWalker : MonoBehaviour
 		Vector3 currentPosition = transform.position;
 		Portal enterPortal = PortalManager.instance.enterPortal;
 		Portal exitPortal = PortalManager.instance.exitPortal;
+		Collider enterCollider = enterPortal ? enterPortal.surface.AttachedCollider : null;
+		Collider exitCollider = exitPortal ? exitPortal.surface.AttachedCollider : null;
+
 		if(enterPortalAttachedCol)
 			Physics.IgnoreCollision(enterPortalAttachedCol, col, false);
 		if(exitPortalAttachedCol)
 			Physics.IgnoreCollision(exitPortalAttachedCol, col, false);
 
-		if (enterPortal.attatchedCollider == exitPortal.attatchedCollider && enterPortal.attatchedCollider != null) {
+		if (enterCollider == exitCollider && enterCollider != null) {
 
 			bool p1Front = enterPortal.walkDetector.IsInFront(currentPosition);
 			bool p2Front = exitPortal.walkDetector.IsInFront(currentPosition);
 			if (p1Front || p2Front)
-				Physics.IgnoreCollision(enterPortal.attatchedCollider, col);
+				Physics.IgnoreCollision(enterCollider, col);
 			else
-				Physics.IgnoreCollision(enterPortal.attatchedCollider, col, false);
+				Physics.IgnoreCollision(enterCollider, col, false);
 		} else {
-			if (enterPortal.attatchedCollider)
-				Physics.IgnoreCollision(col, enterPortal.attatchedCollider, enterPortal.walkDetector.IsInFront(currentPosition));
-			if (exitPortal.attatchedCollider)
-				Physics.IgnoreCollision(col, exitPortal.attatchedCollider, exitPortal.walkDetector.IsInFront(currentPosition));
+			if (enterCollider)
+				Physics.IgnoreCollision(col, enterCollider, enterPortal.walkDetector.IsInFront(currentPosition));
+			if (exitCollider)
+				Physics.IgnoreCollision(col, exitCollider, exitPortal.walkDetector.IsInFront(currentPosition));
 		}
-		enterPortalAttachedCol = enterPortal.attatchedCollider;
-		exitPortalAttachedCol = exitPortal.attatchedCollider;
+		enterPortalAttachedCol = enterCollider;
+		exitPortalAttachedCol = exitCollider;
 	}
 }

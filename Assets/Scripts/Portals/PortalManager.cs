@@ -40,11 +40,8 @@ public class PortalManager : MonoBehaviour {
 		Vector3 pos = result.position + rot * Vector3.forward * portalPlacementOffset;
 		if(!isEnter)
 			rot *= Quaternion.Euler(0, 180, 0);
-		Collider col = surface.AttachedCollider;
-
 		placedPortal = Instantiate(portalPrefab, pos, rot);
-		placedPortal.mainCamera = Camera.main;
-		placedPortal.attatchedCollider = col;
+		placedPortal.surface = surface;
 		placedPortal.connectedPortal = otherPortal;
 		
 		if(otherPortal)

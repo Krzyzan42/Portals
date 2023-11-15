@@ -4,18 +4,22 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
 	public WalkDetector walkDetector;
-	public Camera portalCamera;
-	public MeshRenderer screen;
-	public Transform clippingPlane;
-	public MeshRenderer backFace;
-	public int recursionLimit;
 	public Vector2 size;
+	public int recursionLimit;
 
-	public Camera mainCamera;
 	public Portal connectedPortal;
-	public Collider attatchedCollider;
+	public PortalSurface surface;
 
+	[SerializeField]
+	private Camera portalCamera;
+	[SerializeField]
+	private MeshRenderer screen;
+	[SerializeField]
+	private Transform clippingPlane;
+	[SerializeField]
+	private MeshRenderer backFace;
 	private RenderTexture texture;
+	private Camera mainCamera;
 
 	// Transform functions
 	public Vector3 TransformPos(Vector3 pos) {
@@ -135,4 +139,7 @@ public class Portal : MonoBehaviour
 		Render();
 	}
 
+	private void Awake() {
+		mainCamera = Camera.main;
+	}
 }
