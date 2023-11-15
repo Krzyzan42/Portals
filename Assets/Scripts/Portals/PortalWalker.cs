@@ -4,12 +4,13 @@ public abstract class PortalWalker : MonoBehaviour
 {
 	public Collider col;
 
-	private CollisionUpdater collisionUpdater;
 	private Vector3 lastPos;
+	private Collider enterPortalAttachedCol;
+	private Collider exitPortalAttachedCol;
 
 	protected virtual void FixedUpdate() {
 		Update();
-		collisionUpdater.UpdateCollisions(transform.position);
+		UpdateCollisions();
 	}
 
 	protected virtual void Update() {
@@ -32,28 +33,13 @@ public abstract class PortalWalker : MonoBehaviour
 	}
 
 	protected virtual void Awake() {
-		collisionUpdater = new CollisionUpdater(col);
 		lastPos = transform.position;
 	}
-}
 
-class CollisionUpdater
-{
-	public Collider col;
-
-	private Collider enterPortalAttachedCol;
-	private Collider exitPortalAttachedCol;
-
-	private readonly PortalManager portalManager;
-
-	public CollisionUpdater(Collider collider) {
-		col = collider;
-		portalManager = PortalManager.instance;
-	}
-
-	public void UpdateCollisions(Vector3 currentPosition) {
-		Portal enterPortal = portalManager.enterPortal;
-		Portal exitPortal = portalManager.exitPortal;
+	public void UpdateCollisions() {
+		Vector3 currentPosition = transform.position;
+		Portal enterPortal = PortalManager.instance.enterPortal;
+		Portal exitPortal = PortalManager.instance.exitPortal;
 		if(enterPortalAttachedCol)
 			Physics.IgnoreCollision(enterPortalAttachedCol, col, false);
 		if(exitPortalAttachedCol)

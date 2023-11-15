@@ -6,10 +6,6 @@ namespace Assets.Scripts.PlayerMovement
 	public class Player : MonoBehaviour
 	{
 		void Update() {
-			HandlePortalPlacement();
-		}
-
-		void HandlePortalPlacement() {
 			bool e = Input.GetKeyDown(KeyCode.E);
 			bool q = Input.GetKeyDown(KeyCode.Q);
 
@@ -25,10 +21,5 @@ namespace Assets.Scripts.PlayerMovement
 				}
 			}
 		}
-
 	}
-
-
-
-
 }
