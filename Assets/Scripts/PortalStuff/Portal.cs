@@ -44,6 +44,10 @@ public class Portal : MonoBehaviour
 			CreateTexture();
 		if (!screen.IsVisibleFrom(mainCamera))
 			return;
+		if(connectedPortal == null) {
+			screen.material.SetTexture("_MainTex", Texture2D.blackTexture);
+			return;
+		}
 
 		connectedPortal.backFace.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		connectedPortal.screen.enabled = false;

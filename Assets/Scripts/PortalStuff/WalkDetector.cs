@@ -21,17 +21,8 @@ public class WalkDetector : MonoBehaviour {
 	private Plane middle;
 
 	public Vector2 size;
-	public bool walkIn;
 
 	void Awake() {
-		RecalculatePlanes();
-	}
-	public void SetSize(float width, float height) {
-		size = new Vector2(width, height);
-		RecalculatePlanes();
-	}
-
-	private void RecalculatePlanes() {
 		up = ConstructPlane(Vector3.up, size.y);
 		down = ConstructPlane(Vector3.down, size.y);
 		right = ConstructPlane(Vector3.right, size.x);
@@ -77,7 +68,7 @@ public class WalkDetector : MonoBehaviour {
 		return false;
 	}
 
-	public bool isInFront(Vector3 pos) {
+	public bool IsInFront(Vector3 pos) {
 		bool front = middle.InFrontOf(pos);
 
 		if (front) {

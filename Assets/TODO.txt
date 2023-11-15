@@ -1,8 +1,10 @@
-﻿1. WTF is portal size, sort it
+﻿Remove storing references to portalManager.portals
+PortalWalker - enable all collisions if other portal doesnt exits
+WalkDetector - remove recalculate planes
+WalkDetector - are planes neccessary?
+Using size, scale, both or none for portals?
+Add placePortal(PortalSurface, vector3 pos, bool isExit) method somewhere
+Store PortalSurface in Portal instead of attatchedCollider
 
-Portal Surface:
-	Gameobject
-	Generates Hitbox
-	Not rendelable
-	Scale always 1
-	Size set manually
+DONE:
+Portal - render black texture if other portal doesnt exist

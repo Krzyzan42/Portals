@@ -24,7 +24,8 @@ public class PortalPlacer : MonoBehaviour {
 	}
 
 	public void PlaceExit(Vector3 pos, Quaternion rot, Collider collider) {
-		Destroy(exitPortal.gameObject);
+		if(exitPortal)
+			Destroy(exitPortal.gameObject);
 		pos += rot * Vector3.forward * offset;
 		rot *= Quaternion.Euler(0, 180, 0);
 		exitPortal = Instantiate(exitPortalPrefab, pos, rot);
@@ -38,7 +39,8 @@ public class PortalPlacer : MonoBehaviour {
 	}
 
 	public void PlaceEnter(Vector3 pos, Quaternion rot, Collider collider) {
-		Destroy(enterPortal.gameObject);
+		if(enterPortal)
+			Destroy(enterPortal.gameObject);
 		pos += rot * Vector3.forward * offset;
 		enterPortal = Instantiate(enterPortalPrefab, pos, rot);
 		enterPortal.mainCamera = main;
