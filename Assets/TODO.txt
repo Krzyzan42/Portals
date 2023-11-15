@@ -1,0 +1,8 @@
+﻿1. WTF is portal size, sort it
+
+Portal Surface:
+	Gameobject
+	Generates Hitbox
+	Not rendelable
+	Scale always 1
+	Size set manually
