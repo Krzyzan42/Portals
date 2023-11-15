@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 public class BoxSurfaceResult
 {
 	public Vector3 position;
@@ -12,6 +10,7 @@ public class BoxSurfaceResult
 		rotation = rot;
 	}
 }
+
 public class PortalSurface : MonoBehaviour
 {
 	public Vector2 initialSize;

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class PortalWalker : MonoBehaviour
 {
@@ -9,23 +7,16 @@ public abstract class PortalWalker : MonoBehaviour
 	private CollisionUpdater collisionUpdater;
 	private Vector3 lastPos;
 
-	private PortalManager portalManager;
-	private Portal enterPortal;
-	private Portal exitPortal;
-
-
-
 	protected virtual void FixedUpdate() {
-		UpdatePos();
+		Update();
 		collisionUpdater.UpdateCollisions(transform.position);
 	}
 
-	private void Update() {
-		UpdatePos();
-	}
-	
-	private void UpdatePos() {
+	protected virtual void Update() {
 		Vector3 pos = transform.position;
+		Portal enterPortal = PortalManager.instance.enterPortal;
+		Portal exitPortal = PortalManager.instance.exitPortal;
+
 		if (enterPortal.walkDetector.HasWalkedThrough(lastPos, pos)) {
 			WalkedThrough(enterPortal);
 		}
@@ -34,26 +25,15 @@ public abstract class PortalWalker : MonoBehaviour
 		}
 		lastPos = transform.position;
 	}
-
+	
 	protected virtual void WalkedThrough(Portal portal) {
 		transform.position = portal.TransformPos(transform.position);
 		transform.rotation = portal.TransformRot(transform.rotation);
 	}
 
-	private void PortalChanged() {
-		collisionUpdater.UpdateCollisions(transform.position);
-		enterPortal = portalManager.enterPortal;
-		exitPortal = portalManager.exitPortal;
-	}
-
 	protected virtual void Awake() {
 		collisionUpdater = new CollisionUpdater(col);
 		lastPos = transform.position;
-		portalManager = PortalManager.instance;
-
-		enterPortal = portalManager.enterPortal;
-		exitPortal = portalManager.exitPortal;
-		portalManager.portalPlacementChanged.AddListener(PortalChanged);
 	}
 }
 

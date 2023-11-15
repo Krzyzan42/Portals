@@ -1,6 +1,4 @@
 ﻿Remove storing references to portalManager.portals
-PortalWalker - enable all collisions if other portal doesnt exits
-WalkDetector - remove recalculate planes
 WalkDetector - are planes neccessary?
 Using size, scale, both or none for portals?
 Add placePortal(PortalSurface, vector3 pos, bool isExit) method somewhere
@@ -8,3 +6,5 @@ Store PortalSurface in Portal instead of attatchedCollider
 
 DONE:
 Portal - render black texture if other portal doesnt exist
+PortalWalker - enable all collisions if other portal doesnt exist
+WalkDetector - remove recalculate planes
