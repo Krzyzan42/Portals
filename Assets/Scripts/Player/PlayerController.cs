@@ -6,14 +6,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : PortalWalker
 {
-	private float xRot = 0f;
-	private float zRot = 0f;
 	private float lastJumpTime = 0f;
 
 	private Rigidbody rb;
 	private PlayerInput input;
+	private PlayerCamera cam;
 
-	public new Transform camera;
 	public GrapplingGun grapplingGun;
 	public GroundCheck groundCheck;
 
@@ -41,29 +39,14 @@ public class PlayerController : PortalWalker
 		base.Awake();
 		input = GetComponent<PlayerInput>();
 		rb = GetComponent<Rigidbody>();
+		cam = FindObjectOfType<PlayerCamera>();
 	}
 
 	protected override void FixedUpdate() {
-		UpdateRotation();
 		ApplyMovement();
 		ApplyDrag();
 		ApplyGravity();
 		base.FixedUpdate();
-	}
-
-	void UpdateRotation() {
-		float hor = input.horMouse;
-		float ver = input.verMouse;
-
-		float diff = Mathf.DeltaAngle(0, zRot);
-		zRot -= diff * 0.1f;
-		
-		xRot += ver;
-		xRot = Mathf.Clamp(xRot, -90, 90);
-		camera.localRotation = Quaternion.Euler(xRot, 0, zRot);
-		Vector3 rot = transform.rotation.eulerAngles;
-		rot.y += hor;
-		transform.rotation = Quaternion.Euler(rot);
 	}
 
 	void ApplyMovement() {
@@ -71,7 +54,7 @@ public class PlayerController : PortalWalker
 			TryJump();
 
 		Vector3 dir = input.GetMoveVector();
-		Vector3 transfromedDir = camera.TransformDirection(dir);
+		Vector3 transfromedDir = Camera.main.transform.TransformDirection(dir);
 		Vector2 flattened = new Vector2(transfromedDir.x, transfromedDir.z).normalized;
 		Vector2 velocityAdd;
 		if (groundCheck.onGround)
@@ -126,14 +109,12 @@ public class PlayerController : PortalWalker
 	}
 
 	protected override void WalkedThrough(Portal portal){
-		Vector3 angle = portal.TransformRot(camera.rotation).eulerAngles;
-		xRot = Mathf.DeltaAngle(0, angle.x);
-		zRot = angle.z;
-
-		camera.localRotation = Quaternion.Euler(angle.x,0, angle.z);
+		cam.OnWalkThroughPortal(portal);
+		Vector3 angle = portal.TransformRot(transform.rotation).eulerAngles;
 		transform.rotation = Quaternion.Euler(0, angle.y, 0);
 		transform.position = portal.TransformPos(transform.position);
 		rb.velocity = portal.TransformDir(rb.velocity);
+		cam.ForceUpdateTransform();
 
 		grapplingGun.ForceDisconnect();
 	}
