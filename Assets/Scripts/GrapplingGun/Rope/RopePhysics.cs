@@ -10,11 +10,8 @@ public class RopePhysics : MonoBehaviour
 	public float maxYMultDist = 15f;
 
 	[Header("Pull")]
-	public float pushForce = 6f;
-	public float minPullForce = 5f;
-	public float maxPullForce = 30f;
-	public float minPullForceDist = 3f;
-	public float maxPullForceDist = 30f;
+	public float pullForce = 5f;
+	public float verticalPullForce = 30f;
 
 	[Header("Physics")]
 	public float minPhysicsDist = 5f;
@@ -36,15 +33,17 @@ public class RopePhysics : MonoBehaviour
 		if (dist > maxPhysicsDist || dist < minPhysicsDist)
 			return;
 
-		float distForce = Mathf.Clamp(dist, minPullForceDist, maxPullForceDist);
-		float pullForce = MathExt.map(distForce, minPullForceDist, maxPullForceDist, minPullForce, maxPullForce);
+		Vector2 horizontalPull = new Vector2(RopeVector.x, RopeVector.z).normalized * pullForce;
+		
 
 		float yDist = RopeVector.y;
 		float yDistForce = Mathf.Clamp(yDist, minYMultDist, maxYMultDist);
 		float yMult = MathExt.map(yDistForce, minYMultDist, maxYMultDist, minYMult, maxYMult);
+		float verticalPull = yMult * verticalPullForce;
+		if(yDist < 0)
+			verticalPull = 0;
 
-		itself.velocity += Time.fixedDeltaTime * pullForce * yMult * RopeVector.normalized;
-		itself.velocity += Time.fixedDeltaTime * pushForce * itself.transform.forward;
+		itself.velocity += Time.fixedDeltaTime * new Vector3(horizontalPull.x, verticalPull, horizontalPull.y);
 	}
 
 	public void Connect(Vector3 worldHit, Rigidbody itself) {

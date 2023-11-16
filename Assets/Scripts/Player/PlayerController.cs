@@ -32,6 +32,8 @@ public class PlayerController : PortalWalker
 	[Header("Drag")]
 	public float groundHorizontalDrag;
 	public float standingDrag;
+	public float airDrag = 0;
+	public float verticalDrag = 0.1f;
 
 	protected override void Awake() {
 		base.Awake();
@@ -80,10 +82,11 @@ public class PlayerController : PortalWalker
 		if(input.GetMoveVector() == Vector3.zero)
 			drag = standingDrag;
 		if(!groundCheck.onGround)
-			drag = 0;
+			drag = airDrag;
 		horizontalVel = Vector2.Lerp(horizontalVel, Vector2.zero, drag * Time.fixedDeltaTime);
+		float verticalVel = Mathf.Lerp(rb.velocity.y, 0, verticalDrag * Time.fixedDeltaTime);
 
-		rb.velocity = new Vector3(horizontalVel.x, rb.velocity.y, horizontalVel.y);
+		rb.velocity = new Vector3(horizontalVel.x, verticalVel, horizontalVel.y);
 	}
 
 	void ApplyGravity() {
