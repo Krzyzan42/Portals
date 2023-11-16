@@ -355,7 +355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkDetector: {fileID: 3763464886459427836}
   size: {x: 1.505, y: 2.345}
-  recursionLimit: 2
+  recursionLimit: 5
   connectedPortal: {fileID: 0}
   surface: {fileID: 0}
   portalCamera: {fileID: 3763464885731238478}
