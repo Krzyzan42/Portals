@@ -11,6 +11,7 @@ public class PlayerController : PortalWalker
 	private Rigidbody rb;
 	private PlayerInput input;
 	private PlayerCamera cam;
+	private Vector2 HorizontalVel => new Vector2(rb.velocity.x, rb.velocity.z);
 
 	public GrapplingGun grapplingGun;
 	public GroundCheck groundCheck;
@@ -23,17 +24,13 @@ public class PlayerController : PortalWalker
 
 
 	[Header("Movement")]
-	public float airSpeed;
-	public float speed;
-	public float maxSpeed = 6;
-	public float extraGravity = 10;
+	public float acceleration;
+	public float maxHorizontalSpeed = 6;
+	public float gravity = 10;
 
 	[Header("Drag")]
 	public float horizontalDrag;
-	public float verticalDrag;
-	[Range(0, 1)]
-	public float airDragModifier;
-	public float minAirDragVel = 0;
+	public float standingDrag;
 
 	protected override void Awake() {
 		base.Awake();
@@ -55,16 +52,10 @@ public class PlayerController : PortalWalker
 
 		Vector3 dir = input.GetMoveVector();
 		Vector3 transfromedDir = Camera.main.transform.TransformDirection(dir);
-		Vector2 flattened = new Vector2(transfromedDir.x, transfromedDir.z).normalized;
-		Vector2 velocityAdd;
-		if (groundCheck.onGround)
-			velocityAdd = speed * Time.fixedDeltaTime * flattened;
-		else
-			velocityAdd = airSpeed * Time.fixedDeltaTime * flattened;
-		if (CanMove(velocityAdd)) 
-			rb.velocity += new Vector3(velocityAdd.x, 0, velocityAdd.y);
-		
-
+		Vector2 flattenedDir = new Vector2(transfromedDir.x, transfromedDir.z).normalized;
+		Vector2 hor_vel = HorizontalVel + flattenedDir * Time.fixedDeltaTime * acceleration;
+		hor_vel = Vector2.ClampMagnitude(hor_vel, maxHorizontalSpeed);
+		rb.velocity = new Vector3(hor_vel.x, rb.velocity.y, hor_vel.y);
 	}
 
 	void TryJump() {
@@ -79,32 +70,20 @@ public class PlayerController : PortalWalker
 		}
 	}
 
-	bool CanMove(Vector2 velAdd) {
-		Vector2 rbVel = new Vector2(rb.velocity.x, rb.velocity.z);
-		float speedInFacingDirection = Vector2.Dot(velAdd.normalized, rbVel.normalized) * rbVel.magnitude;
-		return speedInFacingDirection < maxSpeed;
-
-	}
-
 	void ApplyDrag() {
 		Vector2 horizontalVel = new Vector2(rb.velocity.x, rb.velocity.z);
-		float verticalVel = rb.velocity.y;
 
-		float drag = 0f;
-		if (groundCheck.onGround)
-			drag = horizontalDrag;
-		else if(horizontalVel.magnitude > minAirDragVel)
-			drag =  horizontalDrag * airDragModifier;
+		float drag = horizontalDrag;
+		if(input.GetMoveVector() == Vector3.zero)
+			drag = standingDrag;
 		horizontalVel = Vector2.Lerp(horizontalVel, Vector2.zero, drag * Time.fixedDeltaTime);
 
-		verticalVel = Mathf.Lerp(verticalVel, 0f, verticalDrag*Time.fixedDeltaTime);
-
-		rb.velocity = new Vector3(horizontalVel.x, verticalVel, horizontalVel.y);
+		rb.velocity = new Vector3(horizontalVel.x, rb.velocity.y, horizontalVel.y);
 	}
 
 	void ApplyGravity() {
 		Vector3 vel = rb.velocity;
-		vel.y -= extraGravity * Time.fixedDeltaTime;
+		vel.y -= gravity * Time.fixedDeltaTime;
 		rb.velocity = vel;
 	}
 
