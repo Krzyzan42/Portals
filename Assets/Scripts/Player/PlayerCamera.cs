@@ -34,6 +34,10 @@ public class PlayerCamera : MonoBehaviour
         transform.position = player.transform.position + offset;
     }
 
+    void Update() {
+        FixedUpdate();
+    }
+
     public void ForceUpdateTransform() {
         transform.position = player.transform.position + offset;
         transform.rotation = Quaternion.Euler(xRot, yRot, zRot);

@@ -24,12 +24,13 @@ public class PlayerController : PortalWalker
 
 
 	[Header("Movement")]
-	public float acceleration;
-	public float maxHorizontalSpeed = 6;
+	public float groundAcceleration;
+	public float airAcceleration;
+	public float maxGroundHorizontalSpeed = 6;
 	public float gravity = 10;
 
 	[Header("Drag")]
-	public float horizontalDrag;
+	public float groundHorizontalDrag;
 	public float standingDrag;
 
 	protected override void Awake() {
@@ -53,8 +54,10 @@ public class PlayerController : PortalWalker
 		Vector3 dir = input.GetMoveVector();
 		Vector3 transfromedDir = Camera.main.transform.TransformDirection(dir);
 		Vector2 flattenedDir = new Vector2(transfromedDir.x, transfromedDir.z).normalized;
+		float acceleration = groundCheck.onGround ? groundAcceleration : airAcceleration;
 		Vector2 hor_vel = HorizontalVel + flattenedDir * Time.fixedDeltaTime * acceleration;
-		hor_vel = Vector2.ClampMagnitude(hor_vel, maxHorizontalSpeed);
+		if(groundCheck.onGround)
+			hor_vel = Vector2.ClampMagnitude(hor_vel, maxGroundHorizontalSpeed);
 		rb.velocity = new Vector3(hor_vel.x, rb.velocity.y, hor_vel.y);
 	}
 
@@ -73,9 +76,11 @@ public class PlayerController : PortalWalker
 	void ApplyDrag() {
 		Vector2 horizontalVel = new Vector2(rb.velocity.x, rb.velocity.z);
 
-		float drag = horizontalDrag;
+		float drag = groundHorizontalDrag;
 		if(input.GetMoveVector() == Vector3.zero)
 			drag = standingDrag;
+		if(!groundCheck.onGround)
+			drag = 0;
 		horizontalVel = Vector2.Lerp(horizontalVel, Vector2.zero, drag * Time.fixedDeltaTime);
 
 		rb.velocity = new Vector3(horizontalVel.x, rb.velocity.y, horizontalVel.y);
