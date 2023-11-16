@@ -16,10 +16,10 @@ public class PortalSurface : MonoBehaviour
 	public Vector2 initialSize;
 	[Range(0f, 0.2f)]
 	public float Offset = 0.05f;
+	public float ColliderThickness = 0.05f;
 	public Collider AttachedCollider;
 
 	private Vector2 size;
-	private const float colliderThickness = 0.05f;
 
 	private void Awake() {
 		size = initialSize;
@@ -27,7 +27,7 @@ public class PortalSurface : MonoBehaviour
 		if(!collider) {
 			collider = gameObject.AddComponent<BoxCollider>();
 		}
-		collider.size = new Vector3(initialSize.x, initialSize.y, colliderThickness);
+		collider.size = new Vector3(initialSize.x, initialSize.y, ColliderThickness);
 		collider.isTrigger = true;
 	}
 
