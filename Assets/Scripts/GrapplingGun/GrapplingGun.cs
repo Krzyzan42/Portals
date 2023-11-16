@@ -75,7 +75,7 @@ public class GrapplingGun : MonoBehaviour
 
 	void ConnectToPoint(Grappable grappable) {
 		Rigidbody grapplePoint = grappable.grapplePoint;
-		rope.Connect(grapplePoint, grapplePoint.transform.position, itself);
+		rope.Connect(grapplePoint, grapplePoint.transform.position, itself, grappable.IsPortal);
 		isGrappling = true;
 		higlight.Disable();
 	}

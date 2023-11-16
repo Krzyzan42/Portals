@@ -23,6 +23,7 @@ public class Grappable : MonoBehaviour
 	// Rigidbody that player can connect to
 	// Can be made into Transform, since grapple implementation has it's own physics
 	public Rigidbody grapplePoint;
+	public bool IsPortal;
 
 
 	public void Awake() {

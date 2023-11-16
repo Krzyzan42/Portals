@@ -17,6 +17,8 @@ public class RopePhysics : MonoBehaviour
 	public float minPhysicsDist = 5f;
 	public float maxPhysicsDist = 50f;
 
+	[HideInInspector]
+	public bool isPortalMode = false;
 
 	private Vector3 RopeVector 
 	{
@@ -29,6 +31,23 @@ public class RopePhysics : MonoBehaviour
 
 	// Move to fixedupdate
 	public void Pull() {
+		if(isPortalMode)
+			PullPortal();
+		else
+			PullNormal();
+	}
+
+	public float portalPullStrength;
+	public float portalMaxVel;
+	public float portalPullMinDist;
+	private void PullPortal() {
+		if(RopeVector.magnitude > portalPullMinDist){
+			Vector3 dir = RopeVector.normalized;
+			itself.velocity = Vector3.Lerp(itself.velocity, dir * portalMaxVel, portalPullStrength * Time.fixedDeltaTime);	
+		}
+	}
+
+	private void PullNormal() {
 		float dist = RopeVector.magnitude;
 		if (dist > maxPhysicsDist || dist < minPhysicsDist)
 			return;

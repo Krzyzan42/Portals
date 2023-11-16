@@ -325,6 +325,10 @@ MonoBehaviour:
   verticalPullForce: 40
   minPhysicsDist: 2
   maxPhysicsDist: 50
+  isPortalMode: 0
+  portalPullStrength: 10
+  portalMaxVel: 30
+  portalPullMinDist: 1
 --- !u!120 &422353289
 LineRenderer:
   m_ObjectHideFlags: 0

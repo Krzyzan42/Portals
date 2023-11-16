@@ -15,19 +15,20 @@ public class Rope : MonoBehaviour
 	private RopePhysics ropePhysics;
 
 
-	public virtual void Connect(Rigidbody other, Vector3 worldHit, Rigidbody itself) {
+	public void Connect(Rigidbody other, Vector3 worldHit, Rigidbody itself, bool isPortal = false) {
 		connected = true;
 		ropePhysics.Connect(worldHit, itself);
+		ropePhysics.isPortalMode = isPortal;
 		ropeRenderer.end = worldHit;
 		ropeRenderer.Show();
 	}
 
-	public virtual void Disconnect() {
+	public void Disconnect() {
 		ropeRenderer.Hide();
 		connected = false;
 	}
 
-	public virtual void Pull() {
+	public void Pull() {
 		if (!connected)
 			throw new System.InvalidOperationException("Trying to pull with grapple gun without grapple gun connected");
 		pullCalled = true;
@@ -50,4 +51,6 @@ public class Rope : MonoBehaviour
 		ropeRenderer = GetComponent<RopeRenderer>();
 		ropePhysics = GetComponent<RopePhysics>();
 	}
+
+
 }
